@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configs>
+  <ocrSuccessPath>D:\test\success\</ocrSuccessPath>
+  <descPath>D:\test\desc\</descPath>
+  <selectUrl>http://ppt.hoboom.com/ocr/select</selectUrl>
+  <updateUrl>http://ppt.hoboom.com/ocr/update</updateUrl>
+  <tempSoucePath>D:\test\pdf11\</tempSoucePath>
+  <tempFinishPath>D:\test\finish\</tempFinishPath>
+</configs>

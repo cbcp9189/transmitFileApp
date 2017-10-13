@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<pdflist>
+
+<pdf Type="GSGGFWB">
+      <doctype>13</doctype>
+      <year>2017</year>
+      <pdfPath>W:/juyuan_data</pdfPath>
+      <excelPath>W:/excel/</excelPath>
+      <excelHead>GSGGFWB</excelHead>
+</pdf>
+<pdf Type="GSGGFWB">
+      <doctype>13</doctype>
+      <year>2016</year>
+      <pdfPath>X:/juyuan_data</pdfPath>
+      <excelPath>W:/excel/</excelPath>
+      <excelHead>GSGGFWB</excelHead>
+</pdf>
+<pdf Type="GSGGFWB">
+      <doctype>13</doctype>
+      <year>other</year>
+      <pdfPath>Y:/juyuan_data</pdfPath>
+      <excelPath>W:/excel/</excelPath>
+      <excelHead>GSGGFWB</excelHead>
+</pdf>
+ <pdf Type="cninfo">
+    <doctype>13</doctype>
+    <year>cninfo</year>
+    <pdfPath>W:/</pdfPath>
+    <excelPath>W:/excel/</excelPath>
+    <excelHead>cninfo</excelHead>
+ </pdf>
+  <pdf Type="userupload">
+    <doctype>16</doctype>
+    <year>userupload</year>
+    <pdfPath>Z:/dearMrLei/data/</pdfPath>
+    <excelPath>W:/excel/</excelPath>
+    <excelHead>cninfo</excelHead>
+  </pdf>
+  <pdf Type="userupload">
+    <doctype>-16</doctype>
+    <year>testuserupload</year>
+    <pdfPath>Z:/dearMrLei/data/</pdfPath>
+    <excelPath>W:/excel/</excelPath>
+    <excelHead>cninfo</excelHead>
+  </pdf>
+  <pdf Type="article">
+    <doctype>127</doctype>
+    <year>article</year>
+    <pdfPath>Z:/dearMrLei/data/subscriptions/</pdfPath>
+    <excelPath>W:/excel/subscriptions/</excelPath>
+    <excelHead>article</excelHead>
+  </pdf>
+  <pdf Type="report">
+    <doctype>2</doctype>
+    <year>report</year>
+    <pdfPath>Z:/dearMrLei/data/</pdfPath>
+    <excelPath>W:/excel/</excelPath>
+    <excelHead>report</excelHead>
+  </pdf>
+  <pdf Type="luobo">
+    <doctype>2</doctype>
+    <year>luobo</year>
+    <pdfPath>V:/luobo_data</pdfPath>
+    <excelPath>W:/excel/</excelPath>
+    <excelHead>luobo</excelHead>
+  </pdf>
+  <pdf Type="hkexnews">
+    <doctype>19</doctype>
+    <year>hkexnews</year>
+    <pdfPath>X:/</pdfPath>
+    <excelPath>W:/excel/</excelPath>
+    <excelHead>hkexnews</excelHead>
+  </pdf>
+  
+  <pdf Type="newotc">
+    <doctype>17</doctype>
+    <year>2017</year>
+    <pdfPath>W:/juyuan_data</pdfPath>
+    <excelPath>W:/excel/</excelPath>
+    <excelHead>GSGGFWB</excelHead>
+  </pdf>
+  <pdf Type="newotc">
+    <doctype>17</doctype>
+    <year>2016</year>
+    <pdfPath>X:/juyuan_data</pdfPath>
+    <excelPath>W:/excel/</excelPath>
+    <excelHead>GSGGFWB</excelHead>
+  </pdf>
+  <pdf Type="newotc">
+    <doctype>17</doctype>
+    <year>other</year>
+    <pdfPath>Y:/juyuan_data</pdfPath>
+    <excelPath>W:/excel/</excelPath>
+    <excelHead>GSGGFWB</excelHead>
+  </pdf>
+  
+  <pdf Type="newotc">
+    <doctype>17</doctype>
+    <year>cninfo</year>
+    <pdfPath>W:/</pdfPath>
+    <excelPath>W:/excel/</excelPath>
+    <excelHead>cninfo</excelHead>
+  </pdf>
+  
+</pdflist>
