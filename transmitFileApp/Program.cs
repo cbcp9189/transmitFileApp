@@ -58,9 +58,9 @@ namespace transmitFileApp
                                        .Build();
 
             scheduler.ScheduleJob(job2, trigger2);      //把作业，触发器加入调度器。
-            Console.ReadKey();
-            //结束
+            //Console.ReadKey();
         }
+            //结束
 
         public static void test1() 
         {
