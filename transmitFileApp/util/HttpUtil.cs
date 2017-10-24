@@ -7,6 +7,8 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using transmitFileApp.constant;
+using transmitFileApp.entity;
 using transmitFileApp.util;
 using WindowsFormsApplication1.entity;
 
@@ -99,6 +101,165 @@ namespace WindowsFormsApplication1.util
             responseReader.Close();
             reqstream.Close();
             return _list;
+        }
+
+        public static PdfData getPdfStreamDataByPipeLining(int limit)
+        {
+            StringBuilder url = new StringBuilder(PathUtil.selectUrl);
+            url.Append("?programName=");
+            url.Append(SystemConstant.PROGRAMNAME);
+            url.Append("&limit=");
+            url.Append(limit);
+
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url.ToString());
+            req.Method = "GET";
+            req.ContentType = "application/json";
+            StreamReader responseReader = new StreamReader(req.GetResponse().GetResponseStream(), System.Text.Encoding.Default);
+            string str = responseReader.ReadToEnd();   //url返回的值
+            Console.WriteLine(str);
+            PdfStreamObj _list = null;
+            if (str != null && !str.Equals(""))
+            {
+                _list = JsonConvert.DeserializeObject<PdfStreamObj>(str);
+            }
+            //LogHelper.WriteLog(typeof(HttpUtil), str);
+            responseReader.Close();
+            PdfData pdfData = new PdfData();
+            if (_list.data != null && _list.data.Count > 0)
+            {
+
+                foreach (PdfStreamInfo info in _list.data)
+                {
+                    PdfStream stream = new PdfStream();
+                    parseStreamToStreamInfo(stream, info);
+                    pdfData.data.Add(stream);
+                }
+            }
+            return pdfData;
+        }
+
+        public static void parseStreamToStreamInfo(PdfStream stream, PdfStreamInfo info)
+        {
+            stream.id = info.id;
+            stream.doc_id = info.docId;
+            stream.doc_type = info.docType;
+            stream.pdf_path = info.pdfPath;
+        }
+
+        public static Boolean updatePdfStreamDataPipeLine(List<PdfStream> pdfdata)
+        {
+            try
+            {
+                RequestJson request = new RequestJson();
+
+                if (pdfdata != null && pdfdata.Count > 0)
+                {
+                    parseStreamToRequestJson(pdfdata[0], request);
+                }
+                else
+                {
+                    return false;
+                }
+
+                string data = JsonConvert.SerializeObject(request);
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(PathUtil.updateUrl);
+
+                req.Timeout = 1 * 60 * 1000;
+                req.Method = "POST";
+                req.ContentType = "application/json";
+                Stream reqstream = req.GetRequestStream();
+                byte[] b = Encoding.ASCII.GetBytes(data);
+                reqstream.Write(b, 0, b.Length);
+                StreamReader responseReader = new StreamReader(req.GetResponse().GetResponseStream(), System.Text.Encoding.Default);
+                string result = responseReader.ReadToEnd();   //url返回的值
+                responseReader.Close();
+                reqstream.Close();
+                Console.WriteLine(result);
+                if (result != null && result.Length > 0)
+                {
+                    Response re = JsonConvert.DeserializeObject<Response>(result);
+                    if (re.code == 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                else
+                {
+                    return false;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static Boolean updatePdfStreamDataByPipeLineToMultiFlag(List<PdfStream> pdfdata)
+        {
+            try
+            {
+                RequestSuccessJson request = new RequestSuccessJson();
+
+                if (pdfdata != null && pdfdata.Count > 0)
+                {
+                    parseStreamToRequestSuccessJson(pdfdata[0], request);
+                }
+                else
+                {
+                    return false;
+                }
+
+                string data = JsonConvert.SerializeObject(request);
+                Console.WriteLine("send data-"+data);
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(PathUtil.multiFlagUrl);
+
+                req.Timeout = 1 * 60 * 1000;
+                req.Method = "POST";
+                req.ContentType = "application/json";
+                Stream reqstream = req.GetRequestStream();
+                byte[] b = Encoding.ASCII.GetBytes(data);
+                reqstream.Write(b, 0, b.Length);
+                StreamReader responseReader = new StreamReader(req.GetResponse().GetResponseStream(), System.Text.Encoding.Default);
+                string result = responseReader.ReadToEnd();   //url返回的值
+                responseReader.Close();
+                reqstream.Close();
+                Console.WriteLine(result);
+                if (result != null && result.Length > 0)
+                {
+                    Response re = JsonConvert.DeserializeObject<Response>(result);
+                    if (re.code == 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public static void parseStreamToRequestJson(PdfStream stream, RequestJson json)
+        {
+            json.id = stream.id;
+            json.isSuccess = stream.ocr_flag.ToString();
+            json.programName = SystemConstant.PROGRAMNAME;
+            json.errorCode = stream.excel_flag.ToString();
+        }
+
+        public static void parseStreamToRequestSuccessJson(PdfStream stream, RequestSuccessJson json)
+        {
+            json.id = stream.id;
+            json.programNames = new String[]{SystemConstant.PROGRAMNAME};
+            json.pdfPath = stream.pdf_path;
         }
     }
 }
