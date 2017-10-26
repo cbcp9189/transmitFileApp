@@ -4,66 +4,92 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using transmitFileApp.entity;
 
 namespace transmitFileApp.util
 {
     class TxtUtil
     {
-        public static Dictionary<int, long> getIdMapList()
+        public static List<PdfVal> getIdMapingList()
         {
-            Dictionary<int, long> idMap = new Dictionary<int, long>();
+            List<PdfVal> pdfValList = new List<PdfVal>();
             string[] idArray = File.ReadAllLines(@"idmapping.txt");
             foreach (String id in idArray) 
             {
                 String[] numArray = id.Split('-');
-                if (numArray.Length == 2) 
+                if (numArray.Length == 4) 
                 {
-                    idMap.Add(int.Parse(numArray[0]), long.Parse(numArray[1]));
+                    PdfVal p = new PdfVal();
+                    p.num = int.Parse(numArray[0]);
+                    p.id = long.Parse(numArray[1]);
+                    p.type = int.Parse(numArray[2]);
+                    p.path = numArray[3];
+                    pdfValList.Add(p);
                 }
-                
             }
-            return idMap;
+            return pdfValList;
         }
-        public static long getId(int num) {
-            Dictionary<int, long> idMap = getIdMapList();
-            if (idMap.ContainsKey(num))
+        public static PdfVal getId(int num)
+        {
+            List<PdfVal> idMap = getIdMapingList();
+            foreach (PdfVal p in idMap)
             {
-                return idMap[num];
+                if (p.num == num)
+                {
+                    return p;
+                }
             }
-            else 
-            {
-                return 0;
-            }
+            return null;
         }
 
         public static void removeId(int num)
         {
-            Dictionary<int, long> idMap = getIdMapList();
-            if (idMap.Remove(num))
+            List<PdfVal> idMap = getIdMapingList();
+            foreach (PdfVal p in idMap)
             {
-                string[] txtArray = new string[idMap.Count];
-                int index = 0;
-                foreach (var item in idMap) 
+                if (p.num == num)
                 {
-                    txtArray[index] = item.Key + "-" + item.Value;
-                    index++;
+                    idMap.Remove(p);
+                    string[] txtArray = new string[idMap.Count];
+                    int index = 0;
+                    foreach (var item in idMap)
+                    {
+                        txtArray[index] = item.num + "-" + item.id+"-"+item.type+"-"+item.path;
+                        index++;
+                    }
+                    File.WriteAllLines(@"idmapping.txt", txtArray);
+                    break;
                 }
-                File.WriteAllLines(@"idmapping.txt", txtArray); 
             }
+            
         }
 
-        public static void addId(int num,long pdfStreamId)
+        public static void addId(int num,long pdfStreamId,int type,String path)
         {
-            Dictionary<int, long> idMap = getIdMapList();
-            idMap.Add(num, pdfStreamId);
-            string[] txtArray = new string[idMap.Count];
-            int index = 0;
-            foreach (var item in idMap)
+            try
             {
-                txtArray[index] = item.Key + "-" + item.Value;
-                index++;
+                List<PdfVal> idMap = getIdMapingList();
+                PdfVal p = new PdfVal();
+                p.num = num;
+                p.id = pdfStreamId;
+                p.type = type;
+                p.path = path;
+                idMap.Add(p);
+                string[] txtArray = new string[idMap.Count];
+                int index = 0;
+                foreach (var item in idMap)
+                {
+                    txtArray[index] = item.num + "-" + item.id + "-" + item.type + "-" + item.path;
+                    index++;
+                }
+                File.WriteAllLines(@"idmapping.txt", txtArray);
+
             }
-            File.WriteAllLines(@"idmapping.txt", txtArray);
+            catch (Exception ex)
+            {
+                Console.WriteLine("插入数据："+ex.Message);
+            }
+            
         }
 
         public static void removeAllIdMapping()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,16 +60,54 @@ namespace WindowsFormsApplication1
                 {
                     m_sshCp.Connect();
                 }
+                
                 m_sshCp.Put(localPath, remotePath);
 
                 return true;
             }
-            catch
+            catch(Exception ex)
             {
+                Console.WriteLine("upload"+ex.Message);
                 return false;
             }
 
         }
+
+        public bool ftpMkdir(string remotePath)
+        {
+            try
+            {
+                if (!m_sshCp.Connected)
+                {
+                    m_sshCp.Connect();
+                }
+                //m_sshCp.
+                String[] paths = remotePath.Split('/');
+                StringBuilder sb = new StringBuilder("/");
+                foreach (String a in paths)
+                {
+                    if (!a.Equals("") && !a.Equals(paths[paths.Length - 1]))
+                    {
+                        sb.Append(a);
+                        Console.WriteLine(sb.ToString());
+                        //m_sshCp.
+                        m_sshCp.Mkdir(sb.ToString());
+                        sb.Append("/");
+                       
+                        
+                    }
+
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("upload" + ex.Message);
+                return false;
+            }
+
+        }
+
         public bool Download(string remotePath, string localPath)
         {
             try
@@ -152,15 +191,14 @@ namespace WindowsFormsApplication1
             SshConnectionInfo objInfo = new SshConnectionInfo();
             objInfo.User = "root";
             objInfo.Host = "106.75.3.227";
-            //objInfo.IdentityFile = "password"; //有2中认证，一种基于PrivateKey,一种基于password
             objInfo.Pass = "ho227boom2uttb"; //基于密码
             SFTPHelper objSFTPHelper = new SFTPHelper(objInfo);
-            //ArrayList list = objSFTPHelper.GetFileList("/data/dearMrLei/data/rich/2017/07/01");
-            //String remotePath = "/data/dearMrLei/data/rich/2017/07/01/FZLzzR9H8uJCtGcqg.pdf";
-            //String localPath = "D:\\test\\pdf\\FZLzzR9H8uJCtGcqg.pdf";
             return objSFTPHelper.Download(remotePath, localPath);
-            //Console.WriteLine("download...");
         }
+
+        //ArrayList list = objSFTPHelper.GetFileList("/data/dearMrLei/data/rich/2017/07/01");
+        //String remotePath = "/data/dearMrLei/data/rich/2017/07/01/FZLzzR9H8uJCtGcqg.pdf";
+        //String localPath = "D:\\test\\pdf\\FZLzzR9H8uJCtGcqg.pdf";
 
         public static bool checkFile(String remotePath)
         {
@@ -172,6 +210,36 @@ namespace WindowsFormsApplication1
             return objSFTPHelper.checkFileIsExist(remotePath);
         }
 
+        public static bool UploadFile(String localPath,String remotePath)
+        {
+            SshConnectionInfo objInfo = new SshConnectionInfo();
+            objInfo.User = "root";
+            objInfo.Host = "106.75.3.227";
+            objInfo.Pass = "ho227boom2uttb"; //基于密码
+            SFTPHelper objSFTPHelper = new SFTPHelper(objInfo);
+            
+            return objSFTPHelper.Upload(localPath,remotePath);
+        }
 
+        public static bool deleteFile(String remotePath)
+        {
+            SshConnectionInfo objInfo = new SshConnectionInfo();
+            objInfo.User = "root";
+            objInfo.Host = "106.75.3.227";
+            objInfo.Pass = "ho227boom2uttb"; //基于密码
+            SFTPHelper objSFTPHelper = new SFTPHelper(objInfo);
+            return objSFTPHelper.Delete(remotePath);
+        }
+
+        public static bool mkDir(String remotePath)
+        {
+            SshConnectionInfo objInfo = new SshConnectionInfo();
+            objInfo.User = "root";
+            objInfo.Host = "106.75.3.227";
+            objInfo.Pass = "ho227boom2uttb"; //基于密码
+            SFTPHelper objSFTPHelper = new SFTPHelper(objInfo);
+
+            return objSFTPHelper.ftpMkdir(remotePath);
+        }
     }
 }

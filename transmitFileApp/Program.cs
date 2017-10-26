@@ -20,6 +20,7 @@ namespace transmitFileApp
 
         static void Main1(string[] args)
         {
+            Console.WriteLine("start.....");
             test1();
         }
         static void Main(string[] args)
@@ -39,7 +40,7 @@ namespace transmitFileApp
             ITrigger trigger1 = TriggerBuilder.Create()
                                        .StartNow()                        //现在开始
                                        .WithSimpleSchedule(x => x         //触发时间，30秒一次
-                                           .WithIntervalInSeconds(20)
+                                           .WithIntervalInSeconds(5)
                                            .RepeatForever())              //不间断重复执行
                                        .Build();
 
@@ -53,28 +54,28 @@ namespace transmitFileApp
             ITrigger trigger2 = TriggerBuilder.Create()
                                        .StartNow()                        //现在开始
                                        .WithSimpleSchedule(x => x         //触发时间，30秒一次。
-                                           .WithIntervalInSeconds(30)
+                                           .WithIntervalInSeconds(5)
                                            .RepeatForever())              //不间断重复执行
                                        .Build();
 
             scheduler.ScheduleJob(job2, trigger2);      //把作业，触发器加入调度器。
-            //Console.ReadKey();
+            
         }
             //结束
 
         public static void test1() 
         {
-            SshConnectionInfo objInfo = new SshConnectionInfo();
-            objInfo.User = "root";
-            objInfo.Host = "106.75.3.227";
-            //objInfo.IdentityFile = "password"; //有2中认证，一种基于PrivateKey,一种基于password
-            objInfo.Pass = "ho227boom2uttb"; //基于密码
-            SFTPHelper objSFTPHelper = new SFTPHelper(objInfo);
-            //ArrayList list = objSFTPHelper.GetFileList("/data/dearMrLei/data/rich/2017/07/01");
-            String remotePath = "/data/dearMrLei/data/rich/2017/07/01/FZLzzR9H8uJCtGcqg.pdf";
-            String localPath = "D:\\test\\pdf\\FZLzzR9H8uJCtGcqg.pdf";
-            objSFTPHelper.Download(remotePath, localPath);
-            Console.WriteLine("download...");
+            //FtpTest.mytest();
+            String remotePath = "/data/dearMrLei/data/cninfoG/test/test123/README.md";
+            String localPath = @"D:\test\apiManager/README.md";
+            //remotePath = Path.GetDirectoryName(remotePath);
+            //SFTPHelper.UploadFile(localPath, remotePath);
+            //SFTPHelper.mkDir(remotePath);
+            //Console.WriteLine("download end...");
+            Ftp.mkdir(remotePath);
+            Console.WriteLine("end......");
+            //SFTPHelper.mkDir(remotePath);
+
         }
     }
 }

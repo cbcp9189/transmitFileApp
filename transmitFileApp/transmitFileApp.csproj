@@ -54,6 +54,10 @@
       <HintPath>..\packages\Quartz.2.6.0\lib\net40\Quartz.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
+      <HintPath>..\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -72,7 +76,14 @@
     <Compile Include="entity\PdfData.cs" />
     <Compile Include="entity\PdfModel.cs" />
     <Compile Include="entity\PdfStream.cs" />
+    <Compile Include="entity\PdfStreamInfo.cs" />
+    <Compile Include="entity\PdfStreamObj.cs" />
+    <Compile Include="entity\PdfVal.cs" />
+    <Compile Include="entity\RequestJson.cs" />
+    <Compile Include="entity\RequestSuccessJson.cs" />
+    <Compile Include="entity\Response.cs" />
     <Compile Include="entity\ResultEntity.cs" />
+    <Compile Include="Ftp.cs" />
     <Compile Include="job\NeedOcrFileJob.cs" />
     <Compile Include="job\OcrFileJob.cs" />
     <Compile Include="Program.cs" />
@@ -89,14 +100,18 @@
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.xml">
       <SubType>Designer</SubType>
     </Content>
     <Content Include="idmapping.txt" />
-    <Content Include="PathFile.xml" />
+    <Content Include="PathFile.xml">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

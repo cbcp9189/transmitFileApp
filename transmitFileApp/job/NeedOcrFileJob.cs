@@ -25,25 +25,35 @@ namespace transmitFileApp.job
             DirectoryInfo theNeedOcrFolder = new DirectoryInfo(PathUtil.needOcrDestFilePath);
             if (theNeedOcrFolder.GetFiles().Length >= SystemConstant.FILE_COUNT)
             {
-                Console.WriteLine(DateTime.Now+":需要ocr的目录中文件个数大于等于3,暂时不添加数据");
+                Console.WriteLine(DateTime.Now+":需要ocr的目录中文件个数大于等于5,暂时不添加数据");
                 return;
             }
-            //从查询接口获取需要ocr数据
+            
             try
             {
-                PdfData pdfData = HttpUtil.getPdfStreamDataByLimit(SystemConstant.LIMIT);
+                //从接口获取需要ocr数据
+                PdfData pdfData = HttpUtil.getPdfStreamDataByPipeLining(SystemConstant.LIMIT);
                 foreach (PdfStream pdfInfo in pdfData.data)
                 {
-                    
                     String needOcrSourcePath = Path.Combine(PathUtil.tempSoucePath + Path.GetFileName(pdfInfo.pdf_path));
-                    bool isExist = SFTPHelper.checkFile(Path.Combine("/data/dearMrLei/data/", pdfInfo.pdf_path));
+                    String remotePath = "";
+                    //微信文章跟其他类型的报告路径不一样
+                    if (pdfInfo.doc_type == SystemConstant.ARTICLE_TYPE)
+                    {
+                        remotePath = Path.Combine(SystemConstant.ARICLE_PATH, pdfInfo.pdf_path);
+                    }
+                    else
+                    {
+                        remotePath = Path.Combine(SystemConstant.NORMAL_PATH, pdfInfo.pdf_path);
+                    }
+                    bool isExist = Ftp.checkFile(remotePath);
                     if (!isExist) {
                         Console.WriteLine("服务器文件不存在");
                         pdfInfo.ocr_flag = OcrConstant.SERVER_FILE_NO_EXIST;
                         updatePdfStreamOcrStatus(pdfInfo);
                         return;
                     }
-                    bool isSuccess = SFTPHelper.getRemoteFile(Path.Combine("/data/dearMrLei/data/",pdfInfo.pdf_path), needOcrSourcePath);
+                    bool isSuccess = Ftp.donwload(needOcrSourcePath, remotePath);
                     if (!isSuccess) {
                         pdfInfo.ocr_flag = OcrConstant.DOWNLOAD_FAIL;
                         Console.WriteLine("服务器文件下载失败");
@@ -64,8 +74,8 @@ namespace transmitFileApp.job
                     Console.WriteLine(descFilePath);
                     try
                     {
-                        TxtUtil.addId(fileNameVal, pdfInfo.id);
-                        File.Copy(needOcrSourcePath,descFilePath);
+                        TxtUtil.addId(fileNameVal, pdfInfo.id,pdfInfo.doc_type,pdfInfo.pdf_path);
+                        File.Move(needOcrSourcePath,descFilePath);
                         Console.WriteLine("复制成功...");
                     }
                     catch (Exception ex)
@@ -76,10 +86,9 @@ namespace transmitFileApp.job
                 }
             }
             catch (Exception ex) 
-            { 
-            
+            {
+                Console.WriteLine(ex.Message);
             }
-            
         }
 
         public void updatePdfStreamOcrStatus(PdfStream pdfInfo)
@@ -87,9 +96,8 @@ namespace transmitFileApp.job
             try
             {
                 List<PdfStream> pdfDataList = new List<PdfStream>();
-                
                 pdfDataList.Add(pdfInfo);
-                HttpUtil.updatePdfStreamData(pdfDataList);
+                HttpUtil.updatePdfStreamDataPipeLine(pdfDataList);
             }
             catch (Exception ex)
             {

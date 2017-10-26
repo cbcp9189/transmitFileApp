@@ -17,6 +17,9 @@ namespace transmitFileApp.util
         public static String updateUrl = "";
         public static String tempSoucePath = "";
         public static String tempFinishPath = "";
+        public static String multiFlagUrl = "";
+        public static String userUploadUrl = "";
+        public static String testDocType = "";
         public static List<PdfModel> mappingList = new List<PdfModel>();
 
         public static void getFilePath()
@@ -54,11 +57,24 @@ namespace transmitFileApp.util
                     {
                         tempFinishPath = xe.InnerText;
                     }
+                    else if (xe.Name.Equals("multiFlagUrl"))
+                    {
+                        multiFlagUrl = xe.InnerText;
+                    }
+                    else if (xe.Name.Equals("userUploadUrl"))
+                    {
+                        userUploadUrl = xe.InnerText;
+                    }
+                    else if (xe.Name.Equals("docType"))
+                    {
+                        testDocType = xe.InnerText;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 //LogHelper.WriteLog(typeof(PathUtil), ex);
+                Console.WriteLine(ex.Message);
             }
             
         }
@@ -159,17 +175,38 @@ namespace transmitFileApp.util
             //删除needOrc和ocrsuccess文件夹中的数据
 
             DirectoryInfo needOcrDir = new DirectoryInfo(PathUtil.needOcrDestFilePath);
+            if (!needOcrDir.Exists)
+            {
+                Directory.CreateDirectory(PathUtil.needOcrDestFilePath);
+            }
             FileInfo[] needOcrFiles = needOcrDir.GetFiles();
             foreach (var item in needOcrFiles)
             {
                 File.Delete(item.FullName);
             }
             DirectoryInfo successOrcDir = new DirectoryInfo(PathUtil.ocrSuccessDestFilePath);
+            if (!successOrcDir.Exists)
+            {
+                Directory.CreateDirectory(PathUtil.ocrSuccessDestFilePath);
+            }
             FileInfo[] successOrcFile = successOrcDir.GetFiles();
             foreach (var item in successOrcFile)
             {
                 File.Delete(item.FullName);
             }
+
+            DirectoryInfo sourceOcrDir = new DirectoryInfo(PathUtil.tempSoucePath);
+            if (!sourceOcrDir.Exists)
+            {
+                Directory.CreateDirectory(PathUtil.tempSoucePath);
+            }
+
+            FileInfo[] souceOcrFiles = sourceOcrDir.GetFiles();
+            foreach (var item in souceOcrFiles)
+            {
+                File.Delete(item.FullName);
+            }
+
             //清空idmapping.txt
             TxtUtil.removeAllIdMapping();
         }

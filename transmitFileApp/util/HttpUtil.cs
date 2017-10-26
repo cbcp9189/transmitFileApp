@@ -110,7 +110,44 @@ namespace WindowsFormsApplication1.util
             url.Append(SystemConstant.PROGRAMNAME);
             url.Append("&limit=");
             url.Append(limit);
+            Console.WriteLine(url.ToString());
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url.ToString());
+            req.Method = "GET";
+            req.ContentType = "application/json";
+            StreamReader responseReader = new StreamReader(req.GetResponse().GetResponseStream(), System.Text.Encoding.Default);
+            string str = responseReader.ReadToEnd();   //url返回的值
+            Console.WriteLine(str);
+            PdfStreamObj _list = null;
+            if (str != null && !str.Equals(""))
+            {
+                _list = JsonConvert.DeserializeObject<PdfStreamObj>(str);
+            }
+            //LogHelper.WriteLog(typeof(HttpUtil), str);
+            responseReader.Close();
+            PdfData pdfData = new PdfData();
+            if (_list.data != null && _list.data.Count > 0)
+            {
 
+                foreach (PdfStreamInfo info in _list.data)
+                {
+                    PdfStream stream = new PdfStream();
+                    parseStreamToStreamInfo(stream, info);
+                    pdfData.data.Add(stream);
+                }
+            }
+            return pdfData;
+        }
+
+        public static PdfData getPdfStreamDataByUserUpload(int limit)
+        {
+            StringBuilder url = new StringBuilder(PathUtil.userUploadUrl);
+            url.Append("?programName=");
+            url.Append(SystemConstant.PROGRAMNAME);
+            url.Append("&docType=");
+            url.Append(PathUtil.testDocType);
+            url.Append("&limit=");
+            url.Append(limit);
+            Console.WriteLine("url-"+url);
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url.ToString());
             req.Method = "GET";
             req.ContentType = "application/json";

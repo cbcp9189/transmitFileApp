@@ -1,9 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <configs>
-  <ocrSuccessPath>D:\test\success\</ocrSuccessPath>
-  <descPath>D:\test\desc\</descPath>
-  <selectUrl>http://ppt.hoboom.com/ocr/select</selectUrl>
-  <updateUrl>http://ppt.hoboom.com/ocr/update</updateUrl>
-  <tempSoucePath>D:\test\pdf11\</tempSoucePath>
-  <tempFinishPath>D:\test\finish\</tempFinishPath>
+  <ocrSuccessPath>D:\app\success\</ocrSuccessPath>
+  <descPath>D:\app\desc\</descPath>
+  <selectUrl>http://106.75.85.21:10030/hoboom/streams/redis</selectUrl>
+  <updateUrl>http://106.75.85.21:10030/hoboom/singleFlag</updateUrl>
+  <multiFlagUrl>http://106.75.85.21:10030/hoboom/multiFlag</multiFlagUrl>
+  <userUploadUrl>http://106.75.85.21:10030/hoboom/streams</userUploadUrl>
+  <tempSoucePath>D:\app\resource\</tempSoucePath>
+  <tempFinishPath>D:\app\finish\</tempFinishPath>
+  <docType>19</docType>
 </configs>

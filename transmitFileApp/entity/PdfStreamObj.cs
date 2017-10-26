@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleConvertExcelApp.entity
+namespace WindowsFormsApplication1.entity
 {
-    public class PdfData
+    public class PdfStreamObj
     {
-        public List<PdfStream> data = new List<PdfStream>();
+        public List<PdfStreamInfo> data;
     }
 }
