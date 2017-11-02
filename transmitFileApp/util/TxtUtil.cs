@@ -16,7 +16,7 @@ namespace transmitFileApp.util
             string[] idArray = File.ReadAllLines(@"idmapping.txt");
             foreach (String id in idArray) 
             {
-                String[] numArray = id.Split('-');
+                String[] numArray = id.Split('$');
                 if (numArray.Length == 4) 
                 {
                     PdfVal p = new PdfVal();
@@ -54,7 +54,7 @@ namespace transmitFileApp.util
                     int index = 0;
                     foreach (var item in idMap)
                     {
-                        txtArray[index] = item.num + "-" + item.id+"-"+item.type+"-"+item.path;
+                        txtArray[index] = item.num + "$" + item.id + "$" + item.type + "$" + item.path;
                         index++;
                     }
                     File.WriteAllLines(@"idmapping.txt", txtArray);
@@ -79,7 +79,7 @@ namespace transmitFileApp.util
                 int index = 0;
                 foreach (var item in idMap)
                 {
-                    txtArray[index] = item.num + "-" + item.id + "-" + item.type + "-" + item.path;
+                    txtArray[index] = item.num + "$" + item.id + "$" + item.type + "$" + item.path;
                     index++;
                 }
                 File.WriteAllLines(@"idmapping.txt", txtArray);

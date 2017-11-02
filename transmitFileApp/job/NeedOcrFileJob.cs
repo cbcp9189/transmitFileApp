@@ -23,9 +23,9 @@ namespace transmitFileApp.job
         public void Execute(IJobExecutionContext context)
         {
             DirectoryInfo theNeedOcrFolder = new DirectoryInfo(PathUtil.needOcrDestFilePath);
-            if (theNeedOcrFolder.GetFiles().Length >= SystemConstant.FILE_COUNT)
+            if (theNeedOcrFolder.GetFiles().Length >= SystemConstant.FILE_COUNT)  //
             {
-                Console.WriteLine(DateTime.Now+":需要ocr的目录中文件个数大于等于5,暂时不添加数据");
+                Console.WriteLine(DateTime.Now+":需要ocr的目录中文件个数大于等于2,暂时不添加数据");
                 return;
             }
             

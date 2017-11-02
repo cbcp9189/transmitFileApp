@@ -199,6 +199,7 @@ namespace WindowsFormsApplication1.util
                 }
 
                 string data = JsonConvert.SerializeObject(request);
+                Console.WriteLine("update:"+data);
                 HttpWebRequest req = (HttpWebRequest)WebRequest.Create(PathUtil.updateUrl);
 
                 req.Timeout = 1 * 60 * 1000;
@@ -289,7 +290,7 @@ namespace WindowsFormsApplication1.util
             json.id = stream.id;
             json.isSuccess = stream.ocr_flag.ToString();
             json.programName = SystemConstant.PROGRAMNAME;
-            json.errorCode = stream.excel_flag.ToString();
+            json.errorCode = stream.ocr_flag.ToString();
         }
 
         public static void parseStreamToRequestSuccessJson(PdfStream stream, RequestSuccessJson json)

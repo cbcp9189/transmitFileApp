@@ -66,6 +66,12 @@ namespace transmitFileApp.job
                             File.Delete(ocrFile.FullName);
                             File.Delete(Path.Combine(PathUtil.needOcrDestFilePath, fileName));
                             //TxtUtil.removeId(int.Parse(num));
+                            if (fileName.Contains(SystemConstant.ERROR_STRING))
+                            {
+                                String errorFileName = fileName.Replace(SystemConstant.ERROR_STRING, "");
+                                Console.WriteLine("删除错误的文件名:" + errorFileName);
+                                File.Delete(Path.Combine(PathUtil.needOcrDestFilePath, errorFileName));
+                            }
                             Console.WriteLine("删除needOcr文件" + Path.Combine(PathUtil.needOcrDestFilePath, fileName));
                             continue;
                         }
@@ -76,6 +82,12 @@ namespace transmitFileApp.job
                         File.Delete(ocrFile.FullName);
                         File.Delete(Path.Combine(PathUtil.needOcrDestFilePath, fileName));
                         //TxtUtil.removeId(int.Parse(num));
+                        if (fileName.Contains(SystemConstant.ERROR_STRING))
+                        {
+                            String errorFileName = fileName.Replace(SystemConstant.ERROR_STRING, "");
+                            Console.WriteLine("删除错误的文件名:" + errorFileName);
+                            File.Delete(Path.Combine(PathUtil.needOcrDestFilePath, errorFileName));
+                        }
                         Console.WriteLine("删除needOcr文件" + Path.Combine(PathUtil.needOcrDestFilePath, fileName));
                         continue;
                     }
@@ -137,6 +149,12 @@ namespace transmitFileApp.job
                     {
                         File.Delete(ocrFile.FullName);
                         File.Delete(Path.Combine(PathUtil.needOcrDestFilePath, fileName));
+                        if (fileName.Contains(SystemConstant.ERROR_STRING))
+                        {
+                            String errorFileName = fileName.Replace(SystemConstant.ERROR_STRING, "");
+                            Console.WriteLine("删除错误的文件名:" + errorFileName);
+                            File.Delete(Path.Combine(PathUtil.needOcrDestFilePath, errorFileName));
+                        }
                         //TxtUtil.removeId(int.Parse(num));
                         Console.WriteLine("删除needOcr文件" + Path.Combine(PathUtil.needOcrDestFilePath, fileName));
                     }
