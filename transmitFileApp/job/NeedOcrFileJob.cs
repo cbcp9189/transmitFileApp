@@ -18,6 +18,7 @@ namespace transmitFileApp.job
     {
         public static int fileNameVal = 0;
 
+        public static DateTime defaultDate = DateTime.Now;
 
         //将需要OCR的文件复制到指定的文件中
         public void Execute(IJobExecutionContext context)
@@ -28,7 +29,8 @@ namespace transmitFileApp.job
                 Console.WriteLine(DateTime.Now+":需要ocr的目录中文件个数大于等于2,暂时不添加数据");
                 return;
             }
-            
+
+            defaultDate = DateTime.Now;  //保存需要下载文件的时间
             try
             {
                 //从接口获取需要ocr数据
@@ -77,6 +79,18 @@ namespace transmitFileApp.job
                         TxtUtil.addId(fileNameVal, pdfInfo.id,pdfInfo.doc_type,pdfInfo.pdf_path);
                         File.Move(needOcrSourcePath,descFilePath);
                         Console.WriteLine("复制成功...");
+                        //插入数据库
+                        Dao dao = new Dao();
+                        Task.Run(() =>                                          //异步开始执行
+                        {
+                            //查询数据库是否存在这条记录
+                            if (!dao.select(pdfInfo.id)) {
+                                dao.insert(pdfInfo.id, pdfInfo.doc_type);               
+                            }
+                            Console.WriteLine("插入数据库成功。。。");                   //异步执行完成标记
+                        });
+
+
                     }
                     catch (Exception ex)
                     {
