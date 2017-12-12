@@ -44,6 +44,7 @@ namespace transmitFileApp.job
                         continue;
                     }
                     PdfStream pdfStream = new PdfStream();
+                    pdfStream.program_name = SystemConstant.PROGRAMNAME;
                     //将状态设置为ocr完成 2
                     //查看该文件是否执行失败
                     String num = Path.GetFileNameWithoutExtension(fileName);
@@ -130,16 +131,33 @@ namespace transmitFileApp.job
                         pdfStream.id = pv.id;
                         pdfStream.pdf_path = getPdfPath(pv.path); // 
                         pdfStreamList.Add(pdfStream);
+                        int status = 1;  //更新到数据库是否ocr成功
                         if (pdfStream.ocr_flag == OcrConstant.OCR_FINISH)
                         {
                             HttpUtil.updatePdfStreamDataByPipeLineToMultiFlag(pdfStreamList);  //通过multiFlag接口更新
                         }
                         else
                         {
+                            status = -1;
                             HttpUtil.updatePdfStreamDataPipeLine(pdfStreamList);  //更新到数据库
                         }
+                        //将excel的标识改为-26(需要ocr就不需要excel)
+                        pdfStreamList.Clear();
+                        pdfStream = new PdfStream();
+                        pdfStream.id = pv.id;
+                        pdfStream.program_name = SystemConstant.EXCEL_PROGRAMNAME;
+                        pdfStream.excel_flag = SystemConstant.NO_NEED_EXCEL;
+                        pdfStreamList.Add(pdfStream);
+                        HttpUtil.updatePdfStreamDataPipeLineByExcel(pdfStreamList);  //更新到数据库
                         
                         Console.WriteLine("-更新数据库成功");
+                        //插入数据库
+                        Dao dao = new Dao();
+                        Task.Run(() =>                                          //异步开始执行
+                        {
+                            dao.update(pv.id, pv.type,status);
+                            Console.WriteLine("修改数据成功。。。");                   //异步执行完成标记
+                        });
                     }
                     catch (Exception ex)
                     {

@@ -14,32 +14,63 @@ namespace transmitFileApp
     {
         static string m_host = "106.75.3.227";
         static string m_user = "root";
-        static string m_pass = "ho227boom2uttb";
+        //static string m_pass = "ho227boom2uttb";
+        public static ConnectionInfo getConnect()
+        {
+            try
+            {
+                var keyFile = new PrivateKeyFile(@"C:\Users\Administrator\.ssh\id_rsa");
+                var keyFiles = new[] { keyFile };
+                var methods = new List<AuthenticationMethod>();
+                methods.Add(new PrivateKeyAuthenticationMethod(m_user, keyFiles));
+                //methods.Add(new PasswordAuthenticationMethod(m_user, "chenbo"));  //加入密码
+                var con = new ConnectionInfo(m_host, 22, m_user, methods.ToArray());
+                return con;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message + "-ftp");
+            }
+            return null;
+                
+        }
         public static void mytest()
         {
-            using (var client = new ScpClient(m_host, m_user, m_pass))
+
+            var keyFile = new PrivateKeyFile(@"C:\Users\Administrator\.ssh\id_rsa");
+            var keyFiles = new[] { keyFile };
+
+            try
             {
-                try
+                var methods = new List<AuthenticationMethod>();
+                methods.Add(new PrivateKeyAuthenticationMethod(m_user, keyFiles));
+                //methods.Add(new PasswordAuthenticationMethod(m_user, "chenbo"));  //加入密码
+
+                var con = new ConnectionInfo(m_host, 22, m_user, methods.ToArray());
+                using (var client = new ScpClient(con))
                 {
+                    String remotePath = "/data/dearMrLei/data/user_test/2017/06/16/1.pdf";
                     client.Connect();
-                    //client.
-                    //client.CreateDirectory("/home/sshnet/");
-                    //client.up
-                        
-                    client.Upload(new FileInfo(@"C:\Users\Administrator\Desktop\11\sql.txt"), "/home/sshnet/log/1.txt");
-                    client.Disconnect();
-                }
-                catch (Exception e1)
-                {
-                    Console.WriteLine(e1.Message);
+                    
+                    // Do some stuff below
                 }
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+            //C:\Users\Administrator\.ssh\id_rsa
+            //var connectionInfo = new ConnectionInfo(m_host,
+                                        //m_user,
+                                        //new PrivateKeyAuthenticationMethod(@"C:\Users\Administrator\.ssh\id_rsa"));
+           
+            
         }
 
         public static bool upload(string localPath, string remotePath)
         {
             mkdir(remotePath);
-            using (var client = new ScpClient(m_host, m_user, m_pass))
+            using (var client = new ScpClient(getConnect()))
             {
                 try
                 {
@@ -60,7 +91,7 @@ namespace transmitFileApp
 
         public static bool donwload(string localPath, string remotePath)
         {
-            using (var client = new ScpClient(m_host, m_user, m_pass))
+            using (var client = new ScpClient(getConnect()))
             {
                 try
                 {
@@ -80,7 +111,7 @@ namespace transmitFileApp
 
         public static void mkdir(string remotePath)
         {
-            using (var client = new SftpClient(m_host, m_user, m_pass))
+            using (var client = new SftpClient(getConnect()))
             {
                 try
                 {
@@ -115,7 +146,7 @@ namespace transmitFileApp
 
         public static bool checkFile(string remotePath)
         {
-            using (var client = new SftpClient(m_host, m_user, m_pass))
+            using (var client = new SftpClient(getConnect()))
             {
                 try
                 {
@@ -130,7 +161,6 @@ namespace transmitFileApp
                         client.Disconnect();
                         return false;
                     }
-                    
                     
                 }
                 catch (Exception e1)

@@ -23,8 +23,8 @@ namespace transmitFileApp.job
         //将需要OCR的文件复制到指定的文件中
         public void Execute(IJobExecutionContext context)
         {
-            DirectoryInfo theNeedOcrFolder = new DirectoryInfo(PathUtil.needOcrDestFilePath);
-            if (theNeedOcrFolder.GetFiles().Length >= SystemConstant.FILE_COUNT)  //
+            DirectoryInfo needOcrFolder = new DirectoryInfo(PathUtil.needOcrDestFilePath);
+            if (needOcrFolder.GetFiles().Length >= SystemConstant.FILE_COUNT)  //
             {
                 Console.WriteLine(DateTime.Now+":需要ocr的目录中文件个数大于等于2,暂时不添加数据");
                 return;
@@ -37,6 +37,7 @@ namespace transmitFileApp.job
                 PdfData pdfData = HttpUtil.getPdfStreamDataByPipeLining(SystemConstant.LIMIT);
                 foreach (PdfStream pdfInfo in pdfData.data)
                 {
+                    pdfInfo.program_name = SystemConstant.PROGRAMNAME;
                     String needOcrSourcePath = Path.Combine(PathUtil.tempSoucePath + Path.GetFileName(pdfInfo.pdf_path));
                     String remotePath = "";
                     //微信文章跟其他类型的报告路径不一样

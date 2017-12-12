@@ -20,6 +20,8 @@ namespace transmitFileApp.util
         public static String multiFlagUrl = "";
         public static String userUploadUrl = "";
         public static String testDocType = "";
+        public static String sendMsgPath = "";
+        public static String serverName = "";
         public static List<PdfModel> mappingList = new List<PdfModel>();
 
         public static void getFilePath()
@@ -68,6 +70,14 @@ namespace transmitFileApp.util
                     else if (xe.Name.Equals("docType"))
                     {
                         testDocType = xe.InnerText;
+                    }
+                    else if (xe.Name.Equals("smsUrl"))
+                    {
+                        sendMsgPath = xe.InnerText;
+                    }
+                    else if (xe.Name.Equals("serverName"))
+                    {
+                        serverName = xe.InnerText;
                     }
                 }
             }

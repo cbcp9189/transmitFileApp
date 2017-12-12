@@ -14,5 +14,7 @@ namespace ConsoleConvertExcelApp.entity
         public int doc_type;
         public int excel_flag;
         public int ocr_flag;
+        public String program_name = "";
+        
     }
 }

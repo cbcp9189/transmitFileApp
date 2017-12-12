@@ -85,10 +85,12 @@
     <Compile Include="entity\ResultEntity.cs" />
     <Compile Include="Ftp.cs" />
     <Compile Include="job\NeedOcrFileJob.cs" />
+    <Compile Include="job\MonitorJob.cs" />
     <Compile Include="job\OcrFileJob.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="util\BaseDao.cs" />
+    <Compile Include="util\Dao.cs" />
     <Compile Include="util\HttpUtil.cs" />
     <Compile Include="util\PathUtil.cs" />
     <Compile Include="util\SFTPHelper.cs" />

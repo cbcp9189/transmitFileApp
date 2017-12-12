@@ -6,7 +6,9 @@
   <updateUrl>http://106.75.85.21:10030/hoboom/singleFlag</updateUrl>
   <multiFlagUrl>http://106.75.85.21:10030/hoboom/multiFlag</multiFlagUrl>
   <userUploadUrl>http://106.75.85.21:10030/hoboom/streams</userUploadUrl>
+  <smsUrl>http://api.test.hoboom.com/hoboom/message/sendMonitorInfo</smsUrl>
   <tempSoucePath>D:\app\resource\</tempSoucePath>
   <tempFinishPath>D:\app\finish\</tempFinishPath>
+  <serverName>测试服务器</serverName>
   <docType>19</docType>
 </configs>

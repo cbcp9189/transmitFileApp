@@ -21,7 +21,7 @@ namespace transmitFileApp
         static void Main1(string[] args)
         {
             Console.WriteLine("start.....");
-            test1();
+            Ftp.mytest();
         }
         static void Main(string[] args)
         {
@@ -59,22 +59,34 @@ namespace transmitFileApp
                                        .Build();
 
             scheduler.ScheduleJob(job2, trigger2);      //把作业，触发器加入调度器。
+
+            //==========定时检测下载文件的时间===========
+            IJobDetail monitorJob = JobBuilder.Create<MonitorJob>()  //创建一个作业
+                .WithIdentity("monitorFile", "monitorGroup")
+                .Build();
+
+            ITrigger monitorTrigger = TriggerBuilder.Create()
+                                       .StartNow()                        //现在开始
+                                       .WithSimpleSchedule(x => x         //触发时间，30分钟一次。1800
+                                           .WithIntervalInSeconds(3600)
+                                           .RepeatForever())              //不间断重复执行
+                                       .Build();
+
+            scheduler.ScheduleJob(monitorJob, monitorTrigger);      //把作业，触发器加入调度器。
             
         }
             //结束
 
         public static void test1() 
         {
-            //FtpTest.mytest();
-            String remotePath = "/data/dearMrLei/data/cninfoG/test/test123/README.md";
-            String localPath = @"D:\test\apiManager/README.md";
-            //remotePath = Path.GetDirectoryName(remotePath);
-            //SFTPHelper.UploadFile(localPath, remotePath);
-            //SFTPHelper.mkDir(remotePath);
-            //Console.WriteLine("download end...");
-            Ftp.mkdir(remotePath);
-            Console.WriteLine("end......");
-            //SFTPHelper.mkDir(remotePath);
+            Dao d = new Dao();
+            d.select(7655489);
+            //Task.Run(() =>                                          //异步开始执行
+            //{
+              //  dao.update(100, 22);       //异步执行一些任务
+                //Console.WriteLine("Hello World2");                   //异步执行完成标记
+            //});
+           
 
         }
     }

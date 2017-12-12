@@ -235,6 +235,59 @@ namespace WindowsFormsApplication1.util
             }
         }
 
+        public static Boolean updatePdfStreamDataPipeLineByExcel(List<PdfStream> pdfdata)
+        {
+            try
+            {
+                RequestJson request = new RequestJson();
+
+                if (pdfdata != null && pdfdata.Count > 0)
+                {
+                    parseStreamToRequestJsonByExcel(pdfdata[0], request);
+                }
+                else
+                {
+                    return false;
+                }
+
+                string data = JsonConvert.SerializeObject(request);
+                Console.WriteLine("updateexcel:" + data);
+                HttpWebRequest req = (HttpWebRequest)WebRequest.Create(PathUtil.updateUrl);
+
+                req.Timeout = 1 * 60 * 1000;
+                req.Method = "POST";
+                req.ContentType = "application/json";
+                Stream reqstream = req.GetRequestStream();
+                byte[] b = Encoding.ASCII.GetBytes(data);
+                reqstream.Write(b, 0, b.Length);
+                StreamReader responseReader = new StreamReader(req.GetResponse().GetResponseStream(), System.Text.Encoding.Default);
+                string result = responseReader.ReadToEnd();   //url返回的值
+                responseReader.Close();
+                reqstream.Close();
+                Console.WriteLine(result);
+                if (result != null && result.Length > 0)
+                {
+                    Response re = JsonConvert.DeserializeObject<Response>(result);
+                    if (re.code == 0)
+                    {
+                        return true;
+                    }
+                    return false;
+                }
+                else
+                {
+                    return false;
+                }
+
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
         public static Boolean updatePdfStreamDataByPipeLineToMultiFlag(List<PdfStream> pdfdata)
         {
             try
@@ -289,8 +342,16 @@ namespace WindowsFormsApplication1.util
         {
             json.id = stream.id;
             json.isSuccess = stream.ocr_flag.ToString();
-            json.programName = SystemConstant.PROGRAMNAME;
+            json.programName = stream.program_name;
             json.errorCode = stream.ocr_flag.ToString();
+        }
+
+        public static void parseStreamToRequestJsonByExcel(PdfStream stream, RequestJson json)
+        {
+            json.id = stream.id;
+            json.isSuccess = stream.excel_flag.ToString();
+            json.programName = stream.program_name;
+            json.errorCode = stream.excel_flag.ToString();
         }
 
         public static void parseStreamToRequestSuccessJson(PdfStream stream, RequestSuccessJson json)
@@ -298,6 +359,26 @@ namespace WindowsFormsApplication1.util
             json.id = stream.id;
             json.programNames = new String[]{SystemConstant.PROGRAMNAME};
             json.pdfPath = stream.pdf_path;
+        }
+
+        public static void sendMessage(String serverName,String msg,String projectName)
+        {
+            StringBuilder url = new StringBuilder(PathUtil.sendMsgPath);
+            url.Append("?serverName=");
+            url.Append(serverName);
+            url.Append("&msg=");
+            url.Append(msg);
+            url.Append("&projectName=");
+            url.Append("ocr");
+            Console.WriteLine("发送短信:"+url.ToString());
+            HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url.ToString());
+            req.Method = "GET";
+            req.ContentType = "application/json";
+            StreamReader responseReader = new StreamReader(req.GetResponse().GetResponseStream(), System.Text.Encoding.Default);
+            string str = responseReader.ReadToEnd();   //url返回的值
+            Console.WriteLine(str);
+            PdfStreamObj _list = null;
+            responseReader.Close();
         }
     }
 }
